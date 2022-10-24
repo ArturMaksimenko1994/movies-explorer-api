@@ -1,7 +1,7 @@
 // Массив доменов, с которых разрешены кросс-доменные запросы
 const allowedCors = [
-  'https://artur.domainname.studen.nomoredomains.icu',
-  'http://artur.domainname.studen.nomoredomains.icu',
+  'https://api.artur.movie.nomoredomains.icu',
+  'http://api.artur.movie.nomoredomains.icu',
   'localhost:3000',
 ];
 
