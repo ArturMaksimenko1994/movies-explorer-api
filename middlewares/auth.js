@@ -3,7 +3,6 @@ const ErrorUnauthorization = require('../errors/error-unauthorization');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-// eslint-disable-next-line consistent-return
 module.exports = (req, res, next) => {
   // достаём авторизационный заголовок
   const { authorization } = req.headers;
@@ -20,5 +19,5 @@ module.exports = (req, res, next) => {
     return next(new ErrorUnauthorization('Необходима авторизация'));
   }
   req.user = payload; // записываем пейлоуд в объект запроса
-  next(); // пропускаем запрос дальше
+  return next(); // пропускаем запрос дальше
 };

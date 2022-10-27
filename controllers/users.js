@@ -70,10 +70,7 @@ module.exports.getUserInfo = (req, res, next) => {
     })
     .then((user) => res.send(user))
     .catch((err) => {
-      if (err.message === 'NotFound') {
-        return next(new ErrorNotFound('Пользователь не найден'));
-      }
-      return next(err);
+      next(err);
     });
 };
 
@@ -95,6 +92,9 @@ module.exports.updatesUserInfo = (req, res, next) => {
       }
       if (err.message === 'NotFound') {
         return next(new ErrorNotFound('Пользователь с указанным _id не найден'));
+      }
+      if (err.code === 11000) {
+        return next(new ErrorConflict('Пользователь с указаным email уже существует'));
       }
       return next(err);
     });
