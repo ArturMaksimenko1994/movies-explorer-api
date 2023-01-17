@@ -11,24 +11,21 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 
 // создание нового пользователя
 module.exports.createUser = (req, res, next) => {
-  const { name, email } = req.body;
-  bcrypt.hash(req.body.password, 10) // хешируем пароль
+  const { email, name, password } = req.body;
+  bcrypt.hash(password, 10) // хешируем пароль
     .then((hash) => User.create({
       name, email, password: hash,
     }))
     .then((user) => {
-      res.send({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-      });
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
+      return res.status(200).send({ token });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return next(new ErrorValidation('Переданы некорректные данные'));
       }
       if (err.code === 11000) {
-        return next(new ErrorConflict('Пользователь уже существует'));
+        return next(new ErrorValidation('Пользователь уже существует'));
       }
       return next(err);
     });
