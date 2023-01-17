@@ -63,8 +63,8 @@ module.exports.deleteMovie = (req, res, next) => {
 };
 
 // возвращает все сохранённые текущим  пользователем фильмы
-module.exports.getMovie = (req, res, next) => {
-  Movie.find({})
-    .then((movie) => res.send(movie))
+module.exports.getMovies = (req, res, next) => {
+  Movie.find({ owner: req.user._id })
+    .then((films) => res.send(films))
     .catch(next);
 };
